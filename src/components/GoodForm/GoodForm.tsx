@@ -1,13 +1,34 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-console */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Good } from '../../types/Good';
-import { colors, getColorById } from '../../api';
+import { getColorById, getColors } from '../../api';
 import classNames from 'classnames';
 import { GoodsControlContext } from '../GoodsContext';
+import { Color } from '../../types/Color';
 
 type Props = {};
 
 export const GoodForm: React.FC<Props> = () => {
+  const [colors, setColors] = useState<Color[]>([]);
+
+  useEffect(() => {
+    // getColors().then(data => setColors(data));
+    getColors().then(setColors);
+
+    
+    const timerId = setInterval(() => {
+      getColors().then(setColors);
+    }, 3000);
+
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
+
+  console.log("🚀 ~ colors:", colors);
+  
+
   const [newGoodName, setNewGoodName] = useState('');
   const [goodNameError, setGoodNameError] = useState('');
 
@@ -16,7 +37,7 @@ export const GoodForm: React.FC<Props> = () => {
 
   const { addGood } = useContext(GoodsControlContext);
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     if (!newGoodName) {
@@ -31,11 +52,13 @@ export const GoodForm: React.FC<Props> = () => {
       return;
     }
 
+    const color = await getColorById(selectedColorId);
+
     const newGood: Good = {
       id: 0, // temporary id
       name: newGoodName,
       colorId: selectedColorId,
-      color: getColorById(selectedColorId),
+      color,
     };
 
     addGood(newGood);
