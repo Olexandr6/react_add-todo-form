@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useMemo, useState } from 'react';
 import { Good } from '../types/Good';
-import { getColorById, getGoods } from '../api';
+import { getColorById, getColorById1, getGoods } from '../api';
 
 export const GoodsContext = React.createContext<Good[]>([]);
 
@@ -13,7 +13,7 @@ export const GoodsControlContext = React.createContext({
 
 const initialGoods: Good[] = getGoods().map(good => ({
   ...good,
-  color: getColorById(good.colorId),
+  color: getColorById1(good.colorId),
 }));
 
 function getMaxGoodId(goods: Good[]) {

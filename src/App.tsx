@@ -10,7 +10,7 @@ import debounce from 'lodash.debounce';
 import { GoodsContext } from './components/GoodsContext';
 
 export const App = () => {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('1');
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
@@ -43,7 +43,7 @@ export const App = () => {
         }}
       />
       <h1>Add good form</h1>
-      <GoodForm />
+      {title && <GoodForm />}
       <GoodList goods={visibleGoods} />
     </div>
   );
